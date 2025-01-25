@@ -21,7 +21,7 @@ apk add xmlrpc-c || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install xmlrp
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} xmlrpc-c installation finished!"
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of Apache2..."
-apk add apache2 || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install Apache2."; exit 1; }
+apk add apache2 apache2-proxy || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install Apache2."; exit 1; }
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} Apache2 installation finished!"
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of PHP..."
