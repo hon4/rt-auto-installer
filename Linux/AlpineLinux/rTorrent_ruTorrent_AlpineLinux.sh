@@ -71,6 +71,11 @@ wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Li
 wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Linux/AlpineLinux/files/rutorrent.conf -O /etc/apache2/conf.d/rutorrent.conf
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} Configuration files download finished..."
 
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Creating session directory and setting permisions..."
+mkdir -p /home/session
+chmod -R 777 /home/session
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} Session directory creation and permisions setup finished..."
+
 
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of programs required by plugins..."
@@ -85,4 +90,8 @@ echo -e "${GREEN}[  OK  ]${ENDCOLOR} MediaInfo installation finished!"
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of SOX..."
 apk add sox || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install SOX."; exit 1; }
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} SOX installation finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of curl..."
+apk add curl || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install curl."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} curl installation finished!"
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} Rrograms required by plugins installation finished!"
