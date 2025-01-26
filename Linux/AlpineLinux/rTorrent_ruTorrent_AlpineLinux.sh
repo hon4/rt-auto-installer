@@ -26,7 +26,7 @@ echo -e "${GREEN}[  OK  ]${ENDCOLOR} Apache2 installation finished!"
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of PHP..."
 apk add php php-apache2 || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install PHP."; exit 1; }
-echo -e "${GREEN}[  OK  ]${ENDCOLOR} Apache2 installation finished!"
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} PHP installation finished!"
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Restarting Apache2..."
 rc-service apache2 restart || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to restart Apache2."; exit 1; }
