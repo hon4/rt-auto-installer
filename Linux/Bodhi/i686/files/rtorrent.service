@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=forking
 RemainAfterExit=yes
+ExecStartPre=/bin/rm -f /home/session/rtorrent.lock
 ExecStart=/usr/bin/tmux -2 new-session -d -s rtorrent "rtorrent"
 ExecStop=/usr/bin/tmux kill-session -t rtorrent
 Restart=on-failure
