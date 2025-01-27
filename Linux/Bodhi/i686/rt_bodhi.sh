@@ -120,4 +120,10 @@ echo -e "${GREEN}[  OK  ]${ENDCOLOR} Rrograms required by plugins installation f
 
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent + ruTorrent installation and configuration finished!"
 public_ip=$(curl -s https://ipinfo.io/ip)
-echo -e "${BLUE}[ INFO ]${ENDCOLOR} You can access ruTorrent from your browser at the links below:\n\nLocal:\nhttp://localhost\nhttp://127.0.0.1\n\nPublic:\nhttp://$public_ip\n"
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} You can access ruTorrent from your browser at the links below:\n\n${GREEN}Local:${ENDCOLOR}\nhttp://localhost\nhttp://127.0.0.1\n"
+local_ips=$(hostname --all-ip-addresses)
+
+while read -r lip; do
+	echo -e "http://$lip\n"
+done <<< "$local_ips"
+echo -e "${GREEN}Public:${ENDCOLOR}\nhttp://$public_ip\n"
