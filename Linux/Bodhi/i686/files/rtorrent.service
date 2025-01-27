@@ -1,0 +1,17 @@
+[Unit]
+Description=rTorrent Service
+After=network.target
+
+[Service]
+Type=forking
+RemainAfterExit=yes
+ExecStart=/usr/bin/tmux -2 new-session -d -s rtorrent "rtorrent"
+ExecStop=/usr/bin/tmux kill-session -t rtorrent
+Restart=on-failure
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+
+
