@@ -117,3 +117,7 @@ echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of unrar..."
 apt-get install unrar -y || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install unrar."; exit 1; }
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} unrar installation finished!"
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} Rrograms required by plugins installation finished!"
+
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent + ruTorrent installation and configuration finished!"
+public_ip=$(curl -s https://ipinfo.io/ip)
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} You can access ruTorrent from your browser at the links below:\n\nLocal:\nhttp://localhost\nhttp://127.0.0.1\n\nPublic:\nhttp://$public_ip\n"
