@@ -59,7 +59,7 @@ systemctl restart apache2
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} Apache2 starting without commands setup finished!"
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Downloading configuration files..."
-wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Linux/AlpineLinux/files/.rtorrent.rc -O ~/.rtorrent.rc
+wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Linux/AlpineLinux/files/.rtorrent.rc -O /root/.rtorrent.rc
 wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Linux/AlpineLinux/files/rutorrent.conf -O /etc/apache2/conf.d/rutorrent.conf
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} Configuration files download finished..."
 
