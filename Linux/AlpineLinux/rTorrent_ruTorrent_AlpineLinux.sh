@@ -4,21 +4,90 @@ GREEN="\e[32m"
 BLUE="\e[94m"
 ENDCOLOR="\e[0m"
 
-echo -e "${BLUE}[ INFO ]${ENDCOLOR} Adding Edge Community Repository"
-echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-echo -e "${GREEN}[  OK  ]${ENDCOLOR} Edge Community Repository added!"
-
-echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting a quick update..."
-apk update
-echo -e "${GREEN}[  OK  ]${ENDCOLOR} Quick update finished!"
-
-echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of rTorrent..."
-apk add rtorrent || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install rTorrent."; exit 1; }
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting download of rTorrent and libtorrent..."
+wget https://github.com/rakshasa/rtorrent-archive/raw/master/libtorrent-0.13.8.tar.gz || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to download libtorrent."; exit 1; }
+wget https://github.com/rakshasa/rtorrent-archive/raw/master/rtorrent-0.9.8.tar.gz || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to download rTorrent."; exit 1; }
 echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent installation finished!"
 
-echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of xmlrpc-c..."
-apk add xmlrpc-c || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install xmlrpc-c."; exit 1; }
-echo -e "${GREEN}[  OK  ]${ENDCOLOR} xmlrpc-c installation finished!"
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of rTorrent and libtorrent compilation dependencies..."
+apk add autoconf automake build-base zlib-dev openssl-dev libtool linux-headers || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install build dependencies."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} Build dependencies installation finished!"
+
+# libtorrent Start
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting extraction of libtorrent..."
+tar -xzvf libtorrent-0.13.8.tar.gz || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to extract libtorrent."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent extraction finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Entering libtorrent source directory..."
+cd libtorrent-0.13.8 || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to enter libtorrent source directory."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent source directory entered successfully!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting libtorrent build from source..."
+./autogen.sh || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed build libtorrent from source (autogen.sh step)."; exit 1; }
+./configure --prefix=/usr/local --disable-debug || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed build libtorrent from source (configure step)."; exit 1; }
+make -j$(nproc) || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed build libtorrent from source (make step)."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent build from source finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of compiled libtorrent..."
+make install || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install libtorrent."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent installation finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting cleanup of libtorrent build temporarly files..."
+make clean || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed clean temporarly libtorrent build files."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent build temporarly files cleanup finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Exiting libtorrent source directory..."
+cd .. || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to exit libtorrent source directory."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent source directory exited successfully!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting deletion of libtorrent source directory..."
+rm -rf libtorrent-0.13.8 || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to delete libtorrent source directory."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} libtorrent source directory deleted successfully!"
+
+# libtorrent End
+
+# rTorrent Start
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installing dependencies for rTorrent build..."
+apk add ncurses-dev curl-dev xmlrpc-c-dev || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install rTorrent build dependencies."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent build dependencies installed successfully!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting extraction of rTorrent..."
+tar -xzvf rtorrent-0.9.8.tar.gz || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to extract rTorrent."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent extraction finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Entering rTorrent source directory..."
+cd rtorrent-0.9.8 || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to enter rTorrent source directory."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent source directory entered successfully!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting rTorrent build from source..."
+./configure --prefix=/usr/local --with-xmlrpc-c --disable-debug || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed build rTorrent from source (configure step)."; exit 1; }
+make -j$(nproc) || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed build rTorrent from source (make step)."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent built from source successfully!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of compiled rTorrent..."
+make install || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install rTorrent."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent installation finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting cleanup of rTorrent build temporarly files..."
+make clean || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed clean temporarly rTorrent build files."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent build temporarly files cleanup finished!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Exiting rTorrent source directory..."
+cd .. || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to exit rTorrent source directory."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent source directory exited successfully!"
+
+echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting deletion of rTorrent source directory..."
+rm -rf rtorrent-0.9.8 || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to delete rTorrent source directory."; exit 1; }
+echo -e "${GREEN}[  OK  ]${ENDCOLOR} rTorrent source directory deleted successfully!"
+
+# rTorrent End
+
+
+
+
+
 
 echo -e "${BLUE}[ INFO ]${ENDCOLOR} Starting installation of Apache2..."
 apk add apache2 apache2-proxy || { echo -e "${RED}[FAILED]${ENDCOLOR} Failed to install Apache2."; exit 1; }
