@@ -6,3 +6,7 @@ wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Li
 chmod +x rTorrent_ruTorrent_AlpineLinux.sh
 ash rTorrent_ruTorrent_AlpineLinux.sh
 ```
+or single line:
+```
+wget https://raw.githubusercontent.com/hon4/rt-auto-installer/refs/heads/main/Linux/AlpineLinux/rTorrent_ruTorrent_AlpineLinux.sh && chmod +x rTorrent_ruTorrent_AlpineLinux.sh && ash rTorrent_ruTorrent_AlpineLinux.sh
+```
