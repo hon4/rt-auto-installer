@@ -1,35 +1,41 @@
-#/bin/ash
-echo "[ INFO ] Creating rt directory..."
-rm -r rt
-mkdir -p rt
-cd rt
+echo "[ INFO ] Starting rTorrent Build From Source..."
 
-echo "[ INFO ] Installing required packages..." #ninja-build
-apk add autoconf automake build-base cmake curl git libtool linux-headers perl pkgconf python3 python3-dev re2c tar
-apk add boost-dev openssl-dev zlib-dev icu-dev
+echo "[ INFO ] Creating rtorrent_build folder..."
+rm -r rtorrent_build
+mkdir rtorrent_build
+cd rtorrent_build
 
-#libtorrent
+echo "[ INFO ] Installing required packages..."
+apk add build-base zlib-dev openssl-dev linux-headers
+
 echo "[ INFO ] Downloading libtorrent..."
-wget https://github.com/rakshasa/rtorrent-archive/raw/master/libtorrent-0.13.8.tar.gz
-tar -xvf libtorrent-0.13.8.tar.gz
-
+wget https://github.com/rakshasa/rtorrent/releases/download/v0.9.8/libtorrent-0.13.8.tar.gz
+echo "[ INFO ] Extracting libtorrent..."
+tar -xzvf libtorrent-0.13.8.tar.gz
 cd libtorrent-0.13.8
 
-./autogen.sh
-./configure --prefix=/usr/local --with-openssl --enable-debug
+echo "[ INFO ] Configuring libtorrent..."
+./configure --prefix=/usr/local
+echo "[ INFO ] Building libtorrent..."
 make -j$(nproc)
 make install
 
-cd ..
-#rtorrent
-echo "[ INFO ] Downloading rtorrent..."
-wget https://github.com/rakshasa/rtorrent-archive/raw/master/rtorrent-0.9.8.tar.gz
-tar -xvf rtorrent-0.9.8.tar.gz
+echo "[  OK  ] libtorrent built and installed..."
 
+cd ..
+
+echo "[ INFO ] Installing required packages..."
+apk add ncurses-dev curl-dev
+
+echo "[ INFO ] Downloading rTorrent..."
+wget https://github.com/rakshasa/rtorrent/releases/download/v0.9.8/rtorrent-0.9.8.tar.gz
+echo "[ INFO ] Extracting rTorrent..."
+tar -xzvf rtorrent-0.9.8.tar.gz
 cd rtorrent-0.9.8
 
-apk add curl-dev ncurses-dev xmlrpc-c-dev pkgconf build-base
-
-./configure
-make
+echo "[ INFO ] Configuring rTorrent..."
+./configure --prefix=/usr/local
+echo "[ INFO ] Building rTorrent..."
+make -j$(nproc)
 make install
+echo "[  OK  ] rTorrent built and installed..."
