@@ -1,4 +1,10 @@
 # AlpineLinux
+
+| Program    | Version |
+|------------|---------|
+| rTorrent   | 0.9.8   |
+| libtorrent | 0.13.8  |
+
 To use this script on AlpineLinux you can use the following command.
 
 ```
