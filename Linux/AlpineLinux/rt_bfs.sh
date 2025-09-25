@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "[ INFO ] Starting rTorrent Build From Source..."
 
 echo "[ INFO ] Creating rtorrent_build folder..."
